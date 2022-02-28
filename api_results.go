@@ -1,4 +1,3 @@
-
 /*
  * DevCycle Management API
  *
@@ -11,12 +10,12 @@ package go_mgmt_sdk
 
 import (
 	"context"
+	"fmt"
+	"github.com/antihax/optional"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
-	"fmt"
-	"github.com/antihax/optional"
 )
 
 // Linger please
@@ -25,36 +24,37 @@ var (
 )
 
 type ResultsApiService service
+
 /*
 ResultsApiService
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param feature A Feature key or ID
  * @param project A Project key or ID
  * @param optional nil or *ResultsApiResultsControllerGetEvaluationsPerHourByFeatureOpts - Optional Parameters:
-     * @param "StartDate" (optional.Float64) - 
-     * @param "EndDate" (optional.Float64) - 
-     * @param "Platform" (optional.String) - 
-     * @param "Variable" (optional.String) - 
+     * @param "StartDate" (optional.Float64) -
+     * @param "EndDate" (optional.Float64) -
+     * @param "Platform" (optional.String) -
+     * @param "Variable" (optional.String) -
      * @param "Environment" (optional.String) -  A Environment key or ID
-     * @param "Period" (optional.String) - 
+     * @param "Period" (optional.String) -
 @return ResultEvaluationsByHourDto
 */
 
 type ResultsApiResultsControllerGetEvaluationsPerHourByFeatureOpts struct {
-    StartDate optional.Float64
-    EndDate optional.Float64
-    Platform optional.String
-    Variable optional.String
-    Environment optional.String
-    Period optional.String
+	StartDate   optional.Float64
+	EndDate     optional.Float64
+	Platform    optional.String
+	Variable    optional.String
+	Environment optional.String
+	Period      optional.String
 }
 
-func (a *ResultsApiService) ResultsControllerGetEvaluationsPerHourByFeature(ctx context.Context, feature Object, project string, localVarOptionals *ResultsApiResultsControllerGetEvaluationsPerHourByFeatureOpts) (ResultEvaluationsByHourDto, *http.Response, error) {
+func (a *ResultsApiService) ResultsControllerGetEvaluationsPerHourByFeature(ctx context.Context, feature string, project string, localVarOptionals *ResultsApiResultsControllerGetEvaluationsPerHourByFeatureOpts) (ResultEvaluationsByHourDto, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Get")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
+		localVarHttpMethod  = strings.ToUpper("Get")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
 		localVarReturnValue ResultEvaluationsByHourDto
 	)
 
@@ -120,57 +120,58 @@ func (a *ResultsApiService) ResultsControllerGetEvaluationsPerHourByFeature(ctx 
 
 	if localVarHttpResponse.StatusCode < 300 {
 		// If we succeed, return the data, otherwise pass on to decode error.
-		err = a.client.decode(&localVarReturnValue, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
-		if err == nil { 
+		err = a.client.decode(&localVarReturnValue, localVarBody, localVarHttpResponse.Header.Get("Content-Type"))
+		if err == nil {
 			return localVarReturnValue, localVarHttpResponse, err
 		}
 	}
 
 	if localVarHttpResponse.StatusCode >= 300 {
 		newErr := GenericSwaggerError{
-			body: localVarBody,
+			body:  localVarBody,
 			error: localVarHttpResponse.Status,
 		}
 		if localVarHttpResponse.StatusCode == 200 {
 			var v ResultEvaluationsByHourDto
-			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
-				if err != nil {
-					newErr.error = err.Error()
-					return localVarReturnValue, localVarHttpResponse, newErr
-				}
-				newErr.model = v
+			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
 				return localVarReturnValue, localVarHttpResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHttpResponse, newErr
 		}
 		return localVarReturnValue, localVarHttpResponse, newErr
 	}
 
 	return localVarReturnValue, localVarHttpResponse, nil
 }
+
 /*
 ResultsApiService
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param project A Project key or ID
  * @param optional nil or *ResultsApiResultsControllerGetEvaluationsPerHourByProjectOpts - Optional Parameters:
-     * @param "StartDate" (optional.Float64) - 
-     * @param "EndDate" (optional.Float64) - 
+     * @param "StartDate" (optional.Float64) -
+     * @param "EndDate" (optional.Float64) -
      * @param "Environment" (optional.String) -  A Environment key or ID
-     * @param "Period" (optional.String) - 
+     * @param "Period" (optional.String) -
 @return ResultProjectEvaluationsByHourDto
 */
 
 type ResultsApiResultsControllerGetEvaluationsPerHourByProjectOpts struct {
-    StartDate optional.Float64
-    EndDate optional.Float64
-    Environment optional.String
-    Period optional.String
+	StartDate   optional.Float64
+	EndDate     optional.Float64
+	Environment optional.String
+	Period      optional.String
 }
 
 func (a *ResultsApiService) ResultsControllerGetEvaluationsPerHourByProject(ctx context.Context, project string, localVarOptionals *ResultsApiResultsControllerGetEvaluationsPerHourByProjectOpts) (ResultProjectEvaluationsByHourDto, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Get")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
+		localVarHttpMethod  = strings.ToUpper("Get")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
 		localVarReturnValue ResultProjectEvaluationsByHourDto
 	)
 
@@ -229,62 +230,63 @@ func (a *ResultsApiService) ResultsControllerGetEvaluationsPerHourByProject(ctx 
 
 	if localVarHttpResponse.StatusCode < 300 {
 		// If we succeed, return the data, otherwise pass on to decode error.
-		err = a.client.decode(&localVarReturnValue, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
-		if err == nil { 
+		err = a.client.decode(&localVarReturnValue, localVarBody, localVarHttpResponse.Header.Get("Content-Type"))
+		if err == nil {
 			return localVarReturnValue, localVarHttpResponse, err
 		}
 	}
 
 	if localVarHttpResponse.StatusCode >= 300 {
 		newErr := GenericSwaggerError{
-			body: localVarBody,
+			body:  localVarBody,
 			error: localVarHttpResponse.Status,
 		}
 		if localVarHttpResponse.StatusCode == 200 {
 			var v ResultProjectEvaluationsByHourDto
-			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
-				if err != nil {
-					newErr.error = err.Error()
-					return localVarReturnValue, localVarHttpResponse, newErr
-				}
-				newErr.model = v
+			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
 				return localVarReturnValue, localVarHttpResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHttpResponse, newErr
 		}
 		return localVarReturnValue, localVarHttpResponse, newErr
 	}
 
 	return localVarReturnValue, localVarHttpResponse, nil
 }
+
 /*
 ResultsApiService
  * @param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
  * @param feature A Feature key or ID
  * @param project A Project key or ID
  * @param optional nil or *ResultsApiResultsControllerGetResultsSummaryOpts - Optional Parameters:
-     * @param "StartDate" (optional.Float64) - 
-     * @param "EndDate" (optional.Float64) - 
-     * @param "Platform" (optional.String) - 
-     * @param "Variable" (optional.String) - 
+     * @param "StartDate" (optional.Float64) -
+     * @param "EndDate" (optional.Float64) -
+     * @param "Platform" (optional.String) -
+     * @param "Variable" (optional.String) -
      * @param "Environment" (optional.String) -  A Environment key or ID
-     * @param "Period" (optional.String) - 
+     * @param "Period" (optional.String) -
 @return ResultSummaryDto
 */
 
 type ResultsApiResultsControllerGetResultsSummaryOpts struct {
-    StartDate optional.Float64
-    EndDate optional.Float64
-    Platform optional.String
-    Variable optional.String
-    Environment optional.String
-    Period optional.String
+	StartDate   optional.Float64
+	EndDate     optional.Float64
+	Platform    optional.String
+	Variable    optional.String
+	Environment optional.String
+	Period      optional.String
 }
 
-func (a *ResultsApiService) ResultsControllerGetResultsSummary(ctx context.Context, feature Object, project string, localVarOptionals *ResultsApiResultsControllerGetResultsSummaryOpts) (ResultSummaryDto, *http.Response, error) {
+func (a *ResultsApiService) ResultsControllerGetResultsSummary(ctx context.Context, feature string, project string, localVarOptionals *ResultsApiResultsControllerGetResultsSummaryOpts) (ResultSummaryDto, *http.Response, error) {
 	var (
-		localVarHttpMethod = strings.ToUpper("Get")
-		localVarPostBody   interface{}
-		localVarFileName   string
-		localVarFileBytes  []byte
+		localVarHttpMethod  = strings.ToUpper("Get")
+		localVarPostBody    interface{}
+		localVarFileName    string
+		localVarFileBytes   []byte
 		localVarReturnValue ResultSummaryDto
 	)
 
@@ -350,26 +352,26 @@ func (a *ResultsApiService) ResultsControllerGetResultsSummary(ctx context.Conte
 
 	if localVarHttpResponse.StatusCode < 300 {
 		// If we succeed, return the data, otherwise pass on to decode error.
-		err = a.client.decode(&localVarReturnValue, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
-		if err == nil { 
+		err = a.client.decode(&localVarReturnValue, localVarBody, localVarHttpResponse.Header.Get("Content-Type"))
+		if err == nil {
 			return localVarReturnValue, localVarHttpResponse, err
 		}
 	}
 
 	if localVarHttpResponse.StatusCode >= 300 {
 		newErr := GenericSwaggerError{
-			body: localVarBody,
+			body:  localVarBody,
 			error: localVarHttpResponse.Status,
 		}
 		if localVarHttpResponse.StatusCode == 200 {
 			var v ResultSummaryDto
-			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"));
-				if err != nil {
-					newErr.error = err.Error()
-					return localVarReturnValue, localVarHttpResponse, newErr
-				}
-				newErr.model = v
+			err = a.client.decode(&v, localVarBody, localVarHttpResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
 				return localVarReturnValue, localVarHttpResponse, newErr
+			}
+			newErr.model = v
+			return localVarReturnValue, localVarHttpResponse, newErr
 		}
 		return localVarReturnValue, localVarHttpResponse, newErr
 	}
