@@ -1,4 +1,4 @@
-module github.com/devcyclehq/go_mgmt_sdk
+module github.com/devcyclehq/go-mgmt-sdk
 
 go 1.17
 
