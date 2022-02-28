@@ -1,0 +1,3190 @@
+openapi: 3.0.0
+info:
+  title: DevCycle Management API
+  description: ""
+  contact: {}
+  version: 1.0.0
+servers:
+- url: /
+paths:
+  /v1/projects:
+    get:
+      tags:
+      - Projects
+      summary: List Projects
+      description: List Projects
+      operationId: ProjectsController_findAll
+      parameters:
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 1
+          type: number
+          format: int32
+          default: 1
+      - name: perPage
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: number
+          format: int32
+          default: 100
+      - name: sortBy
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: createdAt
+      - name: sortOrder
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: search
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: createdBy
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+                x-content-type: application/json
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+    post:
+      tags:
+      - Projects
+      summary: Create Project
+      description: Create a new Project
+      operationId: ProjectsController_create
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProjectDto'
+        required: true
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+  /v1/projects/{key}:
+    get:
+      tags:
+      - Projects
+      summary: Get a Project
+      description: Get a Project by ID or key
+      operationId: ProjectsController_findOne
+      parameters:
+      - name: key
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+    delete:
+      tags:
+      - Projects
+      summary: Delete a Project
+      description: Delete a Project by ID or key
+      operationId: ProjectsController_remove
+      parameters:
+      - name: key
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+        "405":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CannotDeleteLastItemErrorResponse'
+    patch:
+      tags:
+      - Projects
+      summary: Update a Project
+      description: Update a Project by ID or key
+      operationId: ProjectsController_update
+      parameters:
+      - name: key
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProjectDto'
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+  /v1/projects/{project}/environments:
+    get:
+      tags:
+      - Environments
+      summary: List Environments
+      description: List Environments
+      operationId: EnvironmentsController_findAll
+      parameters:
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 1
+          type: number
+          format: int32
+          default: 1
+      - name: perPage
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: number
+          format: int32
+          default: 100
+      - name: sortBy
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: createdAt
+      - name: sortOrder
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: search
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: createdBy
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Environment'
+                x-content-type: application/json
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+    post:
+      tags:
+      - Environments
+      summary: Create Environment
+      description: Create a new Environment
+      operationId: EnvironmentsController_create
+      parameters:
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEnvironmentDto'
+        required: true
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Environment'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+  /v1/projects/{project}/environments/{key}:
+    get:
+      tags:
+      - Environments
+      summary: Get an Environment
+      description: Get an Environment by ID or key
+      operationId: EnvironmentsController_findOne
+      parameters:
+      - name: key
+        in: path
+        description: A Environment key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Environment'
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+    delete:
+      tags:
+      - Environments
+      summary: Delete an Environment
+      description: Delete an Environment by ID or key
+      operationId: EnvironmentsController_remove
+      parameters:
+      - name: key
+        in: path
+        description: A Environment key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+        "405":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CannotDeleteLastItemErrorResponse'
+    patch:
+      tags:
+      - Environments
+      summary: Update an Environment
+      description: Update an Environment by ID or key
+      operationId: EnvironmentsController_update
+      parameters:
+      - name: key
+        in: path
+        description: A Environment key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEnvironmentDto'
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Environment'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+  /v1/projects/{project}/variables:
+    get:
+      tags:
+      - Variables
+      summary: List Variables
+      operationId: VariablesController_findAll
+      parameters:
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 1
+          type: number
+          format: int32
+          default: 1
+      - name: perPage
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: number
+          format: int32
+          default: 100
+      - name: sortBy
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: createdAt
+      - name: sortOrder
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: search
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: feature
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - String
+          - Boolean
+          - Number
+          - JSON
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Variable'
+                x-content-type: application/json
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+    post:
+      tags:
+      - Variables
+      summary: Create a Variable
+      operationId: VariablesController_create
+      parameters:
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVariableDto'
+        required: true
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variable'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+  /v1/projects/{project}/variables/{key}:
+    get:
+      tags:
+      - Variables
+      summary: Get a Variable
+      operationId: VariablesController_findOne
+      parameters:
+      - name: key
+        in: path
+        description: A Variable key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variable'
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+    delete:
+      tags:
+      - Variables
+      summary: Delete a Variable
+      operationId: VariablesController_remove
+      parameters:
+      - name: key
+        in: path
+        description: A Variable key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+    patch:
+      tags:
+      - Variables
+      summary: Update a Variable
+      operationId: VariablesController_update
+      parameters:
+      - name: key
+        in: path
+        description: A Variable key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateVariableDto'
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variable'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+  /v1/projects/{project}/features:
+    get:
+      tags:
+      - Features
+      summary: List Features
+      description: List Features
+      operationId: FeaturesController_findAll
+      parameters:
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 1
+          type: number
+          format: int32
+          default: 1
+      - name: perPage
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: number
+          format: int32
+          default: 100
+      - name: sortBy
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: createdAt
+      - name: sortOrder
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: search
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: createdBy
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - release
+          - experiment
+          - permission
+          - ops
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Feature'
+                x-content-type: application/json
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+    post:
+      tags:
+      - Features
+      summary: Create Feature
+      description: Create a new Feature
+      operationId: FeaturesController_create
+      parameters:
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFeatureDto'
+        required: true
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+        "412":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreconditionFailedErrorResponse'
+  /v1/projects/{project}/features/{key}:
+    get:
+      tags:
+      - Features
+      summary: Get a Feature
+      description: Get a Feature by ID or key
+      operationId: FeaturesController_findOne
+      parameters:
+      - name: key
+        in: path
+        description: A Feature key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+    delete:
+      tags:
+      - Features
+      summary: Delete a Feature
+      description: Delete a Feature by ID or key
+      operationId: FeaturesController_remove
+      parameters:
+      - name: key
+        in: path
+        description: A Feature key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+    patch:
+      tags:
+      - Features
+      summary: Update a Feature
+      description: Update a Feature by ID or key
+      operationId: FeaturesController_update
+      parameters:
+      - name: key
+        in: path
+        description: A Feature key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFeatureDto'
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Feature'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+        "412":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreconditionFailedErrorResponse'
+  /v1/projects/{project}/features/{key}/integrations/jira/issues:
+    get:
+      tags:
+      - Features
+      - Jira Integration
+      summary: List linked Jira Issues
+      operationId: JiraFeaturesController_findAll
+      parameters:
+      - name: key
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/JiraIssueLink'
+                x-content-type: application/json
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+    post:
+      tags:
+      - Features
+      - Jira Integration
+      summary: Link feature to Jira issue
+      operationId: JiraFeaturesController_create
+      parameters:
+      - name: key
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkJiraIssueDto'
+        required: true
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JiraIssueLink'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+        "412":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreconditionFailedErrorResponse'
+  /v1/projects/{project}/features/{key}/integrations/jira/issues/{issue_id}:
+    delete:
+      tags:
+      - Features
+      - Jira Integration
+      summary: Unlink feature from Jira issue
+      operationId: JiraFeaturesController_remove
+      parameters:
+      - name: key
+        in: path
+        description: A Feature key or ID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: issue_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+  /v1/projects/{project}/features/{feature}/configurations:
+    get:
+      tags:
+      - Features
+      summary: List Feature configurations
+      description: List Feature configurations for all environments or by environment
+        key or ID
+      operationId: FeatureConfigsController_findAll
+      parameters:
+      - name: environment
+        in: query
+        description: A Environment key or ID
+        required: false
+        style: form
+        explode: true
+        schema: {}
+      - name: feature
+        in: path
+        description: A Feature key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeatureConfig'
+                x-content-type: application/json
+        "401":
+          description: ""
+        "404":
+          description: ""
+    patch:
+      tags:
+      - Features
+      summary: Update a Feature configuration
+      description: Update a Feature configuration by environment key or ID
+      operationId: FeatureConfigsController_update
+      parameters:
+      - name: environment
+        in: query
+        description: A Environment key or ID
+        required: true
+        style: form
+        explode: true
+        schema: {}
+      - name: feature
+        in: path
+        description: A Feature key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFeatureConfigDto'
+        required: true
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeatureConfig'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFoundErrorResponse'
+  /v1/projects/{project}/features/{feature}/results/summary:
+    get:
+      tags:
+      - Results
+      operationId: ResultsController_getResultsSummary
+      parameters:
+      - name: startDate
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      - name: endDate
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      - name: platform
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: variable
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: environment
+        in: query
+        description: A Environment key or ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: period
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - day
+          - hour
+          - month
+      - name: feature
+        in: path
+        description: A Feature key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultSummaryDto'
+        "400":
+          description: ""
+        "401":
+          description: ""
+        "404":
+          description: ""
+  /v1/projects/{project}/features/{feature}/results/evaluations:
+    get:
+      tags:
+      - Results
+      operationId: ResultsController_getEvaluationsPerHourByFeature
+      parameters:
+      - name: startDate
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      - name: endDate
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      - name: platform
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: variable
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: environment
+        in: query
+        description: A Environment key or ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: period
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - day
+          - hour
+          - month
+      - name: feature
+        in: path
+        description: A Feature key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultEvaluationsByHourDto'
+        "400":
+          description: ""
+        "401":
+          description: ""
+        "404":
+          description: ""
+  /v1/projects/{project}/results/evaluations:
+    get:
+      tags:
+      - Results
+      operationId: ResultsController_getEvaluationsPerHourByProject
+      parameters:
+      - name: startDate
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      - name: endDate
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: number
+      - name: environment
+        in: query
+        description: A Environment key or ID
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: period
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - day
+          - hour
+          - month
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResultProjectEvaluationsByHourDto'
+        "400":
+          description: ""
+        "401":
+          description: ""
+        "404":
+          description: ""
+  /v1/projects/{project}/customProperties:
+    get:
+      tags:
+      - Custom Properties
+      summary: List Custom Properties
+      description: List Custom Properties
+      operationId: CustomPropertiesController_findAll
+      parameters:
+      - name: page
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          minimum: 1
+          type: number
+          format: int32
+          default: 1
+      - name: perPage
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          maximum: 1000
+          minimum: 1
+          type: number
+          format: int32
+          default: 100
+      - name: sortBy
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: createdAt
+      - name: sortOrder
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          enum:
+          - asc
+          - desc
+          default: desc
+      - name: search
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      responses:
+        "200":
+          description: ""
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomProperty'
+                x-content-type: application/json
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+    post:
+      tags:
+      - Custom Properties
+      summary: Create Custom Property
+      description: Create a new Custom Property
+      operationId: CustomPropertiesController_create
+      parameters:
+      - name: project
+        in: path
+        description: A Project key or ID
+        required: true
+        style: simple
+        explode: false
+        schema: {}
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateCustomPropertyDto'
+        required: true
+      responses:
+        "201":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomProperty'
+        "400":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequestErrorResponse'
+        "401":
+          description: ""
+        "404":
+          description: ""
+        "409":
+          description: ""
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConflictErrorResponse'
+components:
+  schemas:
+    CreateProjectDto:
+      required:
+      - key
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Project name
+          example: Delivery App
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: A unique key to identify the Project
+          example: delivery-app
+        description:
+          maxLength: 1000
+          type: string
+          description: A description of the Project
+          example: A web app to manage outbound deliveries
+    Project:
+      required:
+      - _createdBy
+      - _id
+      - _organization
+      - createdAt
+      - key
+      - name
+      - updatedAt
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Project name
+          example: Delivery App
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: A unique key to identify the Project
+          example: delivery-app
+        description:
+          maxLength: 1000
+          type: string
+          description: A description of the Project
+          example: A web app to manage outbound deliveries
+        _id:
+          type: string
+          description: A unique Project ID
+          example: 61450f3daec96f5cf4a49946
+        _organization:
+          type: string
+          description: ID of the Organization owning the Project
+        _createdBy:
+          type: string
+          description: ID of the User who created the project
+        createdAt:
+          type: string
+          description: The date the Project was created
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date the Project was last updated
+          format: date-time
+      example:
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        _organization: _organization
+        name: Delivery App
+        description: A web app to manage outbound deliveries
+        _id: 61450f3daec96f5cf4a49946
+        _createdBy: _createdBy
+        key: delivery-app
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+    BadRequestErrorResponse:
+      required:
+      - error
+      - message
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: Response status code
+          example: 400
+        message:
+          type: object
+          description: Error details
+          example:
+          - key should not be empty
+        error:
+          type: string
+          description: Error type
+          example: Bad Request
+    ConflictErrorResponse:
+      required:
+      - error
+      - message
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: Response status code
+          example: 409
+        message:
+          type: object
+          description: Error details
+          example: Duplicate key 'delivery-app'
+        error:
+          type: string
+          description: Error type
+          example: Conflict
+    NotFoundErrorResponse:
+      required:
+      - error
+      - message
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: Response status code
+          example: 404
+        message:
+          type: object
+          description: Error details
+          example: Item with key 'delivery-app' not found
+        error:
+          type: string
+          description: Error type
+          example: Not Found
+    UpdateProjectDto:
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Project name
+          example: Delivery App
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: A unique key to identify the Project
+          example: delivery-app
+        description:
+          maxLength: 1000
+          type: string
+          description: A description of the Project
+          example: A web app to manage outbound deliveries
+    CannotDeleteLastItemErrorResponse:
+      required:
+      - error
+      - message
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: Response status code
+          example: 405
+        message:
+          type: object
+          description: Error details
+          example: Cannot DELETE last item
+        error:
+          type: string
+          description: Error type
+          example: Method Not Allowed
+    EnvironmentSettings:
+      type: object
+      properties:
+        appIconURI:
+          maxLength: 2048
+          type: string
+          description: A unique App Icon URI for a given environment
+    CreateEnvironmentDto:
+      required:
+      - key
+      - name
+      - type
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: A unique display name
+          example: Staging Upcoming
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique Environment identifier, can be used in the SDK / API\
+            \ to reference by key rather than ID.\nMust only contain lower-case characters\
+            \ and `_` or `-`."
+          example: staging-upcoming
+        description:
+          maxLength: 1000
+          type: string
+          description: Environment description.
+          example: Pre-production changes
+        color:
+          maxLength: 9
+          pattern: "/^#([0-9A-F]{3}|[0-9A-F]{4}|[0-9A-F]{6}|[0-9A-F]{8})$/i"
+          type: string
+          description: "Environment display color, used to highlight different environments\
+            \ on the dashboard.\nMust use Hex color code."
+          example: '#4073FF'
+        type:
+          type: string
+          description: The environment type
+          example: staging
+          enum:
+          - development
+          - staging
+          - production
+          - disaster_recovery
+        settings:
+          description: Environment based settings
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentSettings'
+    APIKey:
+      required:
+      - createdAt
+      - key
+      type: object
+      properties:
+        key:
+          type: string
+          description: A unique API key
+        createdAt:
+          type: string
+          description: Date the key was generated
+          format: date-time
+    SDKKeys:
+      required:
+      - client
+      - mobile
+      - server
+      type: object
+      properties:
+        mobile:
+          type: array
+          items:
+            $ref: '#/components/schemas/APIKey'
+        client:
+          type: array
+          items:
+            $ref: '#/components/schemas/APIKey'
+        server:
+          type: array
+          items:
+            $ref: '#/components/schemas/APIKey'
+    Environment:
+      required:
+      - _createdBy
+      - _id
+      - _project
+      - createdAt
+      - key
+      - name
+      - sdkKeys
+      - type
+      - updatedAt
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: A unique display name
+          example: Staging Upcoming
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique Environment identifier, can be used in the SDK / API\
+            \ to reference by key rather than ID.\nMust only contain lower-case characters\
+            \ and `_` or `-`."
+          example: staging-upcoming
+        description:
+          maxLength: 1000
+          type: string
+          description: Environment description.
+          example: Pre-production changes
+        color:
+          maxLength: 9
+          pattern: "/^#([0-9A-F]{3}|[0-9A-F]{4}|[0-9A-F]{6}|[0-9A-F]{8})$/i"
+          type: string
+          description: "Environment display color, used to highlight different environments\
+            \ on the dashboard.\nMust use Hex color code."
+          example: '#4073FF'
+        _id:
+          type: string
+          description: A unique Environment ID
+          example: 61450f3daec96f5cf4a49946
+        _project:
+          type: string
+          description: The Project owning the Environment
+        type:
+          type: string
+          description: The environment type
+          example: staging
+          enum:
+          - development
+          - staging
+          - production
+          - disaster_recovery
+        _createdBy:
+          type: string
+          description: ID of the User who created the Environment.
+        createdAt:
+          type: string
+          description: The date the Environment was created
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date the Environment was last updated
+          format: date-time
+        sdkKeys:
+          description: |-
+            SDK Keys for mobile SDKs / client SDKs / server SDKs.
+            Multiple keys can be created to allow for key rotation.
+          allOf:
+          - $ref: '#/components/schemas/SDKKeys'
+        settings:
+          description: Environment based settings
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentSettings'
+      example:
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        settings: ""
+        color: '#4073FF'
+        _project: _project
+        sdkKeys: ""
+        name: Staging Upcoming
+        description: Pre-production changes
+        _id: 61450f3daec96f5cf4a49946
+        _createdBy: _createdBy
+        type: staging
+        key: staging-upcoming
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+    UpdateEnvironmentDto:
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: A unique display name
+          example: Staging Upcoming
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique Environment identifier, can be used in the SDK / API\
+            \ to reference by key rather than ID.\nMust only contain lower-case characters\
+            \ and `_` or `-`."
+          example: staging-upcoming
+        description:
+          maxLength: 1000
+          type: string
+          description: Environment description.
+          example: Pre-production changes
+        color:
+          maxLength: 9
+          pattern: "/^#([0-9A-F]{3}|[0-9A-F]{4}|[0-9A-F]{6}|[0-9A-F]{8})$/i"
+          type: string
+          description: "Environment display color, used to highlight different environments\
+            \ on the dashboard.\nMust use Hex color code."
+          example: '#4073FF'
+        type:
+          type: string
+          description: The environment type
+          example: staging
+          enum:
+          - development
+          - staging
+          - production
+          - disaster_recovery
+        settings:
+          description: Environment based settings
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentSettings'
+    CreateVariableDto:
+      required:
+      - key
+      - type
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Variable name
+          example: Show New Dashboard
+        description:
+          maxLength: 1000
+          type: string
+          description: A description of the Variable
+          example: A boolean variable that will toggle the new dashboard feature
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique Variable identifier, can be used in the SDK / API to\
+            \ reference by key rather then ID.\nMust only contain lower-case characters\
+            \ and `_` or `-`."
+          example: show-new-dashboard
+        _feature:
+          type: string
+          description: The key or ID of the Feature this Variable is associated with
+          example: new-dashboard
+        type:
+          type: string
+          description: "The type of Variable. Must be one of [String | Boolean | Number\
+            \ | JSON]"
+          example: Boolean
+          enum:
+          - String
+          - Boolean
+          - Number
+          - JSON
+        defaultValue:
+          type: object
+          description: A default value for the Variable
+          example: false
+    Variable:
+      required:
+      - _id
+      - _project
+      - createdAt
+      - key
+      - source
+      - type
+      - updatedAt
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Variable name
+          example: Show New Dashboard
+        description:
+          maxLength: 1000
+          type: string
+          description: A description of the Variable
+          example: A boolean variable that will toggle the new dashboard feature
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique Variable identifier, can be used in the SDK / API to\
+            \ reference by key rather then ID.\nMust only contain lower-case characters\
+            \ and `_` or `-`."
+          example: show-new-dashboard
+        _id:
+          type: string
+          description: A unique Variable ID
+          example: 61450f3daec96f5cf4a49946
+        _project:
+          type: string
+          description: The ID of the Project this Variable belongs to
+        _feature:
+          type: string
+          description: The ID of the Feature this Variable belongs to
+          example: 61450f3daec96f5cf4a49947
+        type:
+          type: string
+          description: "The type of Variable. Must be one of [String | Boolean | Number\
+            \ | JSON]"
+          example: Boolean
+          enum:
+          - String
+          - Boolean
+          - Number
+          - JSON
+        defaultValue:
+          type: object
+          description: A default value for the Variable
+          example: false
+        source:
+          type: string
+          description: The system that was used for the creation of the Variable.
+          example: api
+          enum:
+          - api
+          - dashboard
+          - clientSDK
+          - serverSDK
+        _createdBy:
+          type: string
+          description: ID of the User who created the Variable.
+        createdAt:
+          type: string
+          description: The date the Variable was created
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date the Variable was last updated
+          format: date-time
+      example:
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        _project: _project
+        _feature: 61450f3daec96f5cf4a49947
+        defaultValue: false
+        name: Show New Dashboard
+        description: A boolean variable that will toggle the new dashboard feature
+        _id: 61450f3daec96f5cf4a49946
+        source: api
+        _createdBy: _createdBy
+        type: Boolean
+        key: show-new-dashboard
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+    UpdateVariableDto:
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Variable name
+          example: Show New Dashboard
+        description:
+          maxLength: 1000
+          type: string
+          description: A description of the Variable
+          example: A boolean variable that will toggle the new dashboard feature
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique Variable identifier, can be used in the SDK / API to\
+            \ reference by key rather then ID.\nMust only contain lower-case characters\
+            \ and `_` or `-`."
+          example: show-new-dashboard
+        _feature:
+          type: string
+          description: The key or ID of the Feature this Variable is associated with
+          example: new-dashboard
+    FeatureVariationDto:
+      required:
+      - key
+      - name
+      type: object
+      properties:
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique key by Feature, can be used in the SDK / API to reference\
+            \ by 'key' rather than _id.\nMust only contain lower-case characters and\
+            \ `_` or `-`."
+          example: variation-1
+        name:
+          maxLength: 100
+          type: string
+          description: Variation display name.
+          example: User's with dashboard access
+        variables:
+          type: object
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: boolean
+            - type: array
+            - type: object
+          description: A key-value map of variables to their value for this variation
+          example:
+            show-new-dashboard: true
+            string-var: hello world
+            bool-var: true
+            num-var: 99
+            json-var:
+              foo: bar
+    CreateFeatureDto:
+      required:
+      - key
+      - name
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Name of the Feature
+          example: New Dashboard
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique key by Project, can be used in the SDK / API to reference\
+            \ by 'key' rather than _id.\nMust only contain lower-case characters and\
+            \ `_` or `-`."
+          example: new-dash
+        description:
+          maxLength: 1000
+          type: string
+          description: Feature description.
+          example: New client-facing dashboard.
+        variations:
+          type: array
+          description: Variation configurations to be used by feature configurations.
+          items:
+            $ref: '#/components/schemas/FeatureVariationDto'
+        variables:
+          type: array
+          description: Variable definitions to be referenced in variations
+          items:
+            $ref: '#/components/schemas/CreateVariableDto'
+        type:
+          type: string
+          description: The Feature type
+          enum:
+          - release
+          - experiment
+          - permission
+          - ops
+        tags:
+          type: array
+          description: Tags to organize Features on the dashboard
+          example:
+          - Dashboard
+          - QA
+          items:
+            type: string
+    Variation:
+      required:
+      - _id
+      - key
+      - name
+      type: object
+      properties:
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique key by Feature, can be used in the SDK / API to reference\
+            \ by 'key' rather than _id.\nMust only contain lower-case characters and\
+            \ `_` or `-`."
+          example: variation-1
+        name:
+          maxLength: 100
+          type: string
+          description: Variation display name.
+          example: User's with dashboard access
+        variables:
+          type: object
+          additionalProperties:
+            anyOf:
+            - type: string
+            - type: number
+            - type: boolean
+            - type: array
+            - type: object
+          description: A key-value map of variables to their value for this variation
+          example:
+            show-new-dashboard: true
+            string-var: hello world
+            bool-var: true
+            num-var: 99
+            json-var:
+              foo: bar
+        _id:
+          type: string
+          description: A unique Variation ID
+          example: 61450f3daec96f5cf4a49946
+      example:
+        variables:
+          show-new-dashboard: true
+          string-var: hello world
+          bool-var: true
+          num-var: 99
+          json-var:
+            foo: bar
+        name: User's with dashboard access
+        _id: 61450f3daec96f5cf4a49946
+        key: variation-1
+    Feature:
+      required:
+      - _id
+      - _project
+      - createdAt
+      - key
+      - name
+      - source
+      - updatedAt
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Name of the Feature
+          example: New Dashboard
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique key by Project, can be used in the SDK / API to reference\
+            \ by 'key' rather than _id.\nMust only contain lower-case characters and\
+            \ `_` or `-`."
+          example: new-dash
+        description:
+          maxLength: 1000
+          type: string
+          description: Feature description.
+          example: New client-facing dashboard.
+        _id:
+          type: string
+          description: A unique Feature ID
+          example: 61450f3daec96f5cf4a49946
+        _project:
+          type: string
+          description: The Project owning the Feature
+        source:
+          type: string
+          description: Source that created the Feature
+          enum:
+          - api
+          - dashboard
+        type:
+          type: string
+          description: The Feature type
+          enum:
+          - release
+          - experiment
+          - permission
+          - ops
+        _createdBy:
+          type: string
+          description: ID of the User who created the Feature
+        createdAt:
+          type: string
+          description: The date the Feature was created
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date the Feature was last updated
+          format: date-time
+        variations:
+          type: array
+          description: Variation configurations to be used by feature configurations.
+          items:
+            $ref: '#/components/schemas/Variation'
+        variables:
+          type: array
+          description: Variable definitions to be referenced in variations
+          items:
+            $ref: '#/components/schemas/Variable'
+        tags:
+          type: array
+          description: Tags to organize Features on the dashboard
+          example:
+          - Dashboard
+          - QA
+          items:
+            type: string
+      example:
+        variables:
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          _project: _project
+          _feature: 61450f3daec96f5cf4a49947
+          defaultValue: false
+          name: Show New Dashboard
+          description: A boolean variable that will toggle the new dashboard feature
+          _id: 61450f3daec96f5cf4a49946
+          source: api
+          _createdBy: _createdBy
+          type: Boolean
+          key: show-new-dashboard
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+        - createdAt: 2000-01-23T04:56:07.000+00:00
+          _project: _project
+          _feature: 61450f3daec96f5cf4a49947
+          defaultValue: false
+          name: Show New Dashboard
+          description: A boolean variable that will toggle the new dashboard feature
+          _id: 61450f3daec96f5cf4a49946
+          source: api
+          _createdBy: _createdBy
+          type: Boolean
+          key: show-new-dashboard
+          updatedAt: 2000-01-23T04:56:07.000+00:00
+        _project: _project
+        description: New client-facing dashboard.
+        source: api
+        _createdBy: _createdBy
+        type: release
+        tags:
+        - Dashboard
+        - QA
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        variations:
+        - variables:
+            show-new-dashboard: true
+            string-var: hello world
+            bool-var: true
+            num-var: 99
+            json-var:
+              foo: bar
+          name: User's with dashboard access
+          _id: 61450f3daec96f5cf4a49946
+          key: variation-1
+        - variables:
+            show-new-dashboard: true
+            string-var: hello world
+            bool-var: true
+            num-var: 99
+            json-var:
+              foo: bar
+          name: User's with dashboard access
+          _id: 61450f3daec96f5cf4a49946
+          key: variation-1
+        name: New Dashboard
+        _id: 61450f3daec96f5cf4a49946
+        key: new-dash
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+    PreconditionFailedErrorResponse:
+      required:
+      - error
+      - message
+      - statusCode
+      type: object
+      properties:
+        statusCode:
+          type: number
+          description: Response status code
+          example: 412
+        message:
+          type: object
+          description: Error details
+          example: Variable does not belong to Feature
+        error:
+          type: string
+          description: Error type
+          example: Precondition Failed
+    UpdateFeatureDto:
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Name of the Feature
+          example: New Dashboard
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: "Unique key by Project, can be used in the SDK / API to reference\
+            \ by 'key' rather than _id.\nMust only contain lower-case characters and\
+            \ `_` or `-`."
+          example: new-dash
+        description:
+          maxLength: 1000
+          type: string
+          description: Feature description.
+          example: New client-facing dashboard.
+        variations:
+          type: array
+          description: Variation configurations to be used by feature configurations.
+          items:
+            $ref: '#/components/schemas/FeatureVariationDto'
+        variables:
+          type: array
+          description: Variable definitions to be referenced in variations
+          items:
+            $ref: '#/components/schemas/CreateVariableDto'
+        type:
+          type: string
+          description: The Feature type
+          enum:
+          - release
+          - experiment
+          - permission
+          - ops
+        tags:
+          type: array
+          description: Tags to organize Features on the dashboard
+          example:
+          - Dashboard
+          - QA
+          items:
+            type: string
+    LinkJiraIssueDto:
+      required:
+      - issueId
+      type: object
+      properties:
+        issueId:
+          type: string
+    JiraIssueLink:
+      required:
+      - issueId
+      type: object
+      properties:
+        issueId:
+          type: string
+      example:
+        issueId: issueId
+    AllFilter:
+      required:
+      - type
+      type: object
+      properties:
+        type:
+          type: string
+          description: Filter type of this audience
+          enum:
+          - all
+          - user
+          default: all
+    UserFilter:
+      required:
+      - comparator
+      - subType
+      - type
+      type: object
+      properties:
+        subType:
+          type: string
+          description: Sub type of this filter
+          example: email
+          enum:
+          - user_id
+          - email
+          - country
+          - platform
+          - platformVersion
+          - appVersion
+          - deviceModel
+          - customData
+        comparator:
+          type: string
+          description: Comparator to use
+          example: '!='
+          enum:
+          - =
+          - '!='
+          - exist
+          - '!exist'
+          - contain
+          - '!contain'
+        values:
+          type: array
+          description: An array of values is required for all filters except when
+            the comparator is 'exist' or '!exist'
+          example:
+          - baduser@email.com
+          items:
+            type: string
+        type:
+          type: string
+          description: Filter type of this audience
+          enum:
+          - all
+          - user
+          default: user
+    UserCountryFilter:
+      required:
+      - comparator
+      - subType
+      - type
+      - values
+      type: object
+      properties:
+        subType:
+          type: string
+          description: Sub type of this filter
+          example: email
+          enum:
+          - user_id
+          - email
+          - country
+          - platform
+          - platformVersion
+          - appVersion
+          - deviceModel
+          - customData
+          default: country
+        comparator:
+          type: string
+          description: Comparator to use
+          example: '!='
+          enum:
+          - =
+          - '!='
+          - exist
+          - '!exist'
+          - contain
+          - '!contain'
+        values:
+          type: array
+          description: An array of values is required for all filters except when
+            the comparator is 'exist' or '!exist'
+          example:
+          - CA
+          - US
+          items:
+            type: string
+        type:
+          type: string
+          description: Filter type of this audience
+          enum:
+          - all
+          - user
+          default: user
+    UserCustomFilter:
+      required:
+      - comparator
+      - dataKey
+      - dataKeyType
+      - subType
+      - type
+      type: object
+      properties:
+        comparator:
+          type: string
+          description: Comparator to use
+          example: '>='
+          enum:
+          - =
+          - '!='
+          - '>'
+          - '>='
+          - <
+          - <=
+          - exist
+          - '!exist'
+          - contain
+          - '!contain'
+        dataKey:
+          minLength: 1
+          type: string
+          description: Data Key used for custom data
+          example: my_custom_prop
+        dataKeyType:
+          type: string
+          description: Data Key Type used for custom data
+          example: Number
+          enum:
+          - String
+          - Boolean
+          - Number
+          - Semver
+        values:
+          type: object
+          description: An array of values is required for all filters except when
+            the comparator is 'exist' or '!exist'
+          example:
+          - 0
+        type:
+          type: string
+          description: Filter type of this audience
+          enum:
+          - all
+          - user
+          default: user
+        subType:
+          type: string
+          description: Sub type of this filter
+          enum:
+          - user_id
+          - email
+          - ip
+          - country
+          - platform
+          - platformVersion
+          - appVersion
+          - deviceModel
+          - customData
+          default: customData
+    AudienceOperator:
+      required:
+      - filters
+      - operator
+      type: object
+      properties:
+        filters:
+          type: array
+          description: Filters to apply using the "operator" operation
+          items:
+            anyOf:
+            - $ref: '#/components/schemas/AllFilter'
+            - $ref: '#/components/schemas/UserFilter'
+            - $ref: '#/components/schemas/UserCountryFilter'
+            - $ref: '#/components/schemas/UserCustomFilter'
+        operator:
+          type: string
+          description: "Operator type if this object represents an operator, and not\
+            \ a filter"
+          enum:
+          - and
+          - or
+    TargetAudience:
+      required:
+      - filters
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: "Audience display name, must be set for project-level audiences."
+          example: Android Users
+        filters:
+          description: "Audience filters, describing logic for segmenting users"
+          allOf:
+          - $ref: '#/components/schemas/AudienceOperator'
+    RolloutStage:
+      required:
+      - date
+      - percentage
+      - type
+      type: object
+      properties:
+        percentage:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: Target percentage to reach by the step date
+        type:
+          type: object
+          description: Defines the transition into this percentage level
+        date:
+          type: string
+          description: Date the target percentage should be fully applied
+          format: date-time
+    Rollout:
+      required:
+      - startDate
+      - type
+      type: object
+      properties:
+        startPercentage:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: Rollout start percentage
+        type:
+          type: object
+          description: Type of rollout
+        startDate:
+          type: string
+          description: Date to start rollout
+          format: date-time
+        stages:
+          type: array
+          description: Stages of rollout
+          items:
+            $ref: '#/components/schemas/RolloutStage'
+    TargetDistribution:
+      required:
+      - _variation
+      - percentage
+      type: object
+      properties:
+        percentage:
+          maximum: 1
+          minimum: 0
+          type: number
+          description: Distribution percentage for the variation
+          example: 0.5
+        _variation:
+          type: string
+          description: Variation ID or key from `feature.variations`
+          example: variation-1
+      example:
+        percentage: 0.5
+        _variation: variation-1
+    Target:
+      required:
+      - audience
+      - distribution
+      type: object
+      properties:
+        name:
+          type: string
+          description: Target name
+          example: Feature Enabled
+        audience:
+          description: Audience model describing target segmentation.
+          allOf:
+          - $ref: '#/components/schemas/TargetAudience'
+        rollout:
+          description: Rollout sub-document describing how a Target's audience is
+            rolled out
+          allOf:
+          - $ref: '#/components/schemas/Rollout'
+        distribution:
+          type: array
+          description: Specifies variation distribution percentages for features
+          items:
+            $ref: '#/components/schemas/TargetDistribution'
+      example:
+        audience: ""
+        rollout: ""
+        name: Feature Enabled
+        distribution:
+        - percentage: 0.5
+          _variation: variation-1
+        - percentage: 0.5
+          _variation: variation-1
+    FeatureConfig:
+      required:
+      - _createdBy
+      - _environment
+      - _feature
+      - status
+      - targets
+      - updatedAt
+      type: object
+      properties:
+        _feature:
+          type: string
+          description: ID of the Feature owning the Configuration
+          example: 61450f3daec96f5cf4a49946
+        _environment:
+          type: string
+          description: ID of the Environment owning the Configuration
+          example: 61450f3daec96f5cf4a49946
+        _createdBy:
+          type: string
+          description: User who created the Feature Configuration
+        status:
+          type: string
+          description: Status of the Feature Configuration
+          enum:
+          - active
+          - inactive
+          - archived
+        startedAt:
+          type: string
+          description: Date the Feature Configuration was started
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date the Feature Configuration was last updated
+          format: date-time
+        targets:
+          type: array
+          description: The targets to evaluate what variation a user should be delivered
+          items:
+            $ref: '#/components/schemas/Target'
+      example:
+        _feature: 61450f3daec96f5cf4a49946
+        _environment: 61450f3daec96f5cf4a49946
+        startedAt: 2000-01-23T04:56:07.000+00:00
+        _createdBy: _createdBy
+        targets:
+        - audience: ""
+          rollout: ""
+          name: Feature Enabled
+          distribution:
+          - percentage: 0.5
+            _variation: variation-1
+          - percentage: 0.5
+            _variation: variation-1
+        - audience: ""
+          rollout: ""
+          name: Feature Enabled
+          distribution:
+          - percentage: 0.5
+            _variation: variation-1
+          - percentage: 0.5
+            _variation: variation-1
+        status: active
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+    UpdateTargetDto:
+      required:
+      - audience
+      - distribution
+      type: object
+      properties:
+        audience:
+          description: Audience object describing target segmentation.
+          allOf:
+          - $ref: '#/components/schemas/TargetAudience'
+        name:
+          type: string
+          description: Target name
+          example: Feature Enabled
+        rollout:
+          description: Rollout sub-document describing how a Target's audience is
+            rolled out
+          allOf:
+          - $ref: '#/components/schemas/Rollout'
+        distribution:
+          type: array
+          description: Specifies variation distribution percentages for features
+          items:
+            $ref: '#/components/schemas/TargetDistribution'
+    UpdateFeatureConfigDto:
+      required:
+      - targets
+      type: object
+      properties:
+        targets:
+          type: array
+          description: The targets to evaluate what variation a user should be delivered
+          items:
+            $ref: '#/components/schemas/UpdateTargetDto'
+        status:
+          type: string
+          description: Status of the Feature Configuration
+          enum:
+          - active
+          - inactive
+          - archived
+    ResultSummaryDto:
+      required:
+      - cached
+      - result
+      - updatedAt
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/ResultSummaryDto_result'
+        cached:
+          type: boolean
+          description: Whether this result came from a cache or a live result
+        updatedAt:
+          type: string
+          description: Date which these results are up-to-date with
+          format: date-time
+      example:
+        result:
+          counts:
+            total: 0.8008281904610115
+            withFeature: 6.027456183070403
+            accessedFeature: 1.4658129805029452
+        cached: true
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+    FeatureDataPoint:
+      required:
+      - date
+      - values
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date of this data point
+          format: date-time
+        values:
+          type: object
+          description: "Mapping of evaluation variation (variation1, variation2 etc.)\
+            \ to number of evaluations in that variation"
+      example:
+        date: 2000-01-23T04:56:07.000+00:00
+        values: {}
+    ResultEvaluationsByHourDto:
+      required:
+      - cached
+      - result
+      - updatedAt
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/ResultEvaluationsByHourDto_result'
+        cached:
+          type: boolean
+          description: Whether this result came from a cache or a live result
+        updatedAt:
+          type: string
+          description: Date which these results are up-to-date with
+          format: date-time
+      example:
+        result:
+          evaluations:
+          - date: 2000-01-23T04:56:07.000+00:00
+            values: {}
+          - date: 2000-01-23T04:56:07.000+00:00
+            values: {}
+        cached: true
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+    ProjectDataPoint:
+      required:
+      - date
+      - value
+      type: object
+      properties:
+        date:
+          type: string
+          description: Date of this datapoint
+          format: date-time
+        value:
+          type: number
+          description: "Number of variable evaluations across the whole project for\
+            \ this data point, grouped by user"
+      example:
+        date: 2000-01-23T04:56:07.000+00:00
+        value: 0.8008281904610115
+    ResultProjectEvaluationsByHourDto:
+      required:
+      - cached
+      - result
+      - updatedAt
+      type: object
+      properties:
+        result:
+          $ref: '#/components/schemas/ResultProjectEvaluationsByHourDto_result'
+        cached:
+          type: boolean
+          description: Whether this result came from a cache or a live result
+        updatedAt:
+          type: string
+          description: Date which these results are up-to-date with
+          format: date-time
+      example:
+        result:
+          evaluations:
+          - date: 2000-01-23T04:56:07.000+00:00
+            value: 0.8008281904610115
+          - date: 2000-01-23T04:56:07.000+00:00
+            value: 0.8008281904610115
+        cached: true
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+    CreateCustomPropertyDto:
+      required:
+      - key
+      - name
+      - propertyKey
+      - type
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for Custom Property.
+          example: Delivery App
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: |-
+            Auto generated key to be used by the API to reference by 'key' rather then _id for CRUD operations.
+            Must only contain lower-case characters and `_` or `-`.
+          example: delivery-app
+        type:
+          type: string
+          description: "Type of the Custom Propety. Must be one of: \"Boolean\", \"\
+            Number\", \"Semver\" or \"String\""
+          example: String
+          enum:
+          - String
+          - Boolean
+          - Number
+          - Semver
+        propertyKey:
+          type: string
+          description: "Custom Property key, must be unique by Project. Only to be\
+            \ used by the SDKs to reference the Custom Property.."
+          example: Delivery App Secret Agent Code
+    CustomProperty:
+      required:
+      - _createdBy
+      - _id
+      - _project
+      - createdAt
+      - key
+      - name
+      - propertyKey
+      - type
+      - updatedAt
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          type: string
+          description: Display name for Custom Property.
+          example: Delivery App
+        key:
+          maxLength: 100
+          pattern: "^[a-zA-Z0-9-_]+$"
+          type: string
+          description: |-
+            Auto generated key to be used by the API to reference by 'key' rather then _id for CRUD operations.
+            Must only contain lower-case characters and `_` or `-`.
+          example: delivery-app
+        _id:
+          type: string
+          description: A unique CustomProperty ID
+          example: 61450f3daec96f5cf4a49946
+        _project:
+          type: string
+          description: The Project owning the Custom Property
+        _createdBy:
+          type: string
+          description: ID of the User who created the project
+        propertyKey:
+          type: string
+          description: "Custom Property key, must be unique by Project. Only to be\
+            \ used by the SDKs to reference the Custom Property.."
+          example: Delivery App Secret Agent Code
+        type:
+          type: string
+          description: The Custom Property type
+          example: String
+          enum:
+          - String
+          - Boolean
+          - Number
+          - Semver
+        createdAt:
+          type: string
+          description: The date the Project was created
+          format: date-time
+        updatedAt:
+          type: string
+          description: The date the Project was last updated
+          format: date-time
+      example:
+        propertyKey: Delivery App Secret Agent Code
+        createdAt: 2000-01-23T04:56:07.000+00:00
+        _project: _project
+        name: Delivery App
+        _id: 61450f3daec96f5cf4a49946
+        _createdBy: _createdBy
+        type: String
+        key: delivery-app
+        updatedAt: 2000-01-23T04:56:07.000+00:00
+    ResultSummaryDto_result_counts:
+      type: object
+      properties:
+        total:
+          type: number
+        withFeature:
+          type: number
+        accessedFeature:
+          type: number
+      example:
+        total: 0.8008281904610115
+        withFeature: 6.027456183070403
+        accessedFeature: 1.4658129805029452
+    ResultSummaryDto_result:
+      type: object
+      properties:
+        counts:
+          $ref: '#/components/schemas/ResultSummaryDto_result_counts'
+      example:
+        counts:
+          total: 0.8008281904610115
+          withFeature: 6.027456183070403
+          accessedFeature: 1.4658129805029452
+    ResultEvaluationsByHourDto_result:
+      type: object
+      properties:
+        evaluations:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeatureDataPoint'
+      example:
+        evaluations:
+        - date: 2000-01-23T04:56:07.000+00:00
+          values: {}
+        - date: 2000-01-23T04:56:07.000+00:00
+          values: {}
+    ResultProjectEvaluationsByHourDto_result:
+      type: object
+      properties:
+        evaluations:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProjectDataPoint'
+      example:
+        evaluations:
+        - date: 2000-01-23T04:56:07.000+00:00
+          value: 0.8008281904610115
+        - date: 2000-01-23T04:56:07.000+00:00
+          value: 0.8008281904610115
