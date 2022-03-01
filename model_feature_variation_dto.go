@@ -14,5 +14,5 @@ type FeatureVariationDto struct {
 	// Variation display name.
 	Name string `json:"name"`
 	// A key-value map of variables to their value for this variation
-	Variables map[string]string `json:"variables,omitempty"`
+	Variables map[string]interface{} `json:"variables,omitempty"`
 }
