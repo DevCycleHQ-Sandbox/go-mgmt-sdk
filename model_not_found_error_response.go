@@ -12,7 +12,7 @@ type NotFoundErrorResponse struct {
 	// Response status code
 	StatusCode float64 `json:"statusCode"`
 	// Error details
-	Message *interface{} `json:"message"`
+	Message interface{} `json:"message"`
 	// Error type
 	Error_ string `json:"error"`
 }

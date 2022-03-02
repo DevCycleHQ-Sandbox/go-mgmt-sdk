@@ -13,5 +13,5 @@ type AllOfUpdateTargetDtoAudience struct {
 	// Audience display name, must be set for project-level audiences.
 	Name string `json:"name,omitempty"`
 	// Audience filters, describing logic for segmenting users
-	Filters *interface{} `json:"filters"`
+	Filters interface{} `json:"filters"`
 }

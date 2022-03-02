@@ -16,7 +16,7 @@ type UserCustomFilter struct {
 	// Data Key Type used for custom data
 	DataKeyType string `json:"dataKeyType"`
 	// An array of values is required for all filters except when the comparator is 'exist' or '!exist'
-	Values *interface{} `json:"values,omitempty"`
+	Values interface{} `json:"values,omitempty"`
 	// Filter type of this audience
 	Type_ string `json:"type"`
 	// Sub type of this filter

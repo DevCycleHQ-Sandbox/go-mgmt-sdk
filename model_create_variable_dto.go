@@ -20,5 +20,5 @@ type CreateVariableDto struct {
 	// The type of Variable. Must be one of [String | Boolean | Number | JSON]
 	Type_ string `json:"type"`
 	// A default value for the Variable
-	DefaultValue *interface{} `json:"defaultValue,omitempty"`
+	DefaultValue interface{} `json:"defaultValue,omitempty"`
 }
